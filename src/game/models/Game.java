@@ -4,8 +4,8 @@ import java.util.Observable;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Game extends Observable {
-	private int tab[][];
-	private int clickCounter;
+	private int tab[][];		// Numerical value of each button of the grid.
+	private int clickCounter;	// Click counter.
 
 	public Game() {
 		tab = new int[5][5];
