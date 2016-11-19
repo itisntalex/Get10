@@ -36,8 +36,4 @@ public class Game extends Observable {
 		setChanged();
 		notifyObservers();
 	}
-
-	public static void main(String[] args) {
-		Game g = new Game();
-	}
 }
