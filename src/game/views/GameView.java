@@ -88,6 +88,10 @@ public class GameView extends JFrame implements Observer {
 		return this.model;
 	}
 	
+	public Bouton getBouton(int row, int column) {
+		return this.buttons[row][column];
+	}
+	
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o instanceof Game) {
