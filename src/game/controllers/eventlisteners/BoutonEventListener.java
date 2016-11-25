@@ -32,26 +32,41 @@ public class BoutonEventListener implements ActionListener {
 		// Getting the source button position.
 		int row = source.getRow();
 		int column = source.getColumn();
+		boolean state = this.view.getModel().getButtonState(row, column);
 		
 		source.setForeground(Color.RED);
 		
-		if (this.view.getModel().getButtonValue((row - 1) % 5, column) == value) {
-			this.view.getBouton((row - 1) % 5, column).setForeground(Color.RED);
+		if (this.view.getModel().getButtonValue(mod(row - 1, 5), column) == value) {
+			this.view.getBouton(mod(row - 1, 5), column).setForeground(Color.RED);
 		}
 		
-		if (this.view.getModel().getButtonValue((row + 1) % 5, column) == value) {
-			this.view.getBouton((row + 1) % 5, column).setForeground(Color.RED);
+		if (this.view.getModel().getButtonValue(mod(row + 1, 5), column) == value) {
+			this.view.getBouton(mod(row + 1, 5), column).setForeground(Color.RED);
 		}
 		
-		if (this.view.getModel().getButtonValue(row, (column - 1) % 5) == value) {
-			this.view.getBouton(row, (column - 1) % 5).setForeground(Color.RED);
+		if (this.view.getModel().getButtonValue(row, mod(column - 1, 5)) == value) {
+			this.view.getBouton(row, mod(column - 1, 5)).setForeground(Color.RED);
 		}
 		
-		if (this.view.getModel().getButtonValue(row, (column + 1) % 5) == value) {
-			this.view.getBouton(row, (column + 1) % 5).setForeground(Color.RED);
+		if (this.view.getModel().getButtonValue(row, mod(column + 1, 5)) == value) {
+			this.view.getBouton(row, mod(column + 1, 5)).setForeground(Color.RED);
 		}
+		
+		if (state) {
+			this.view.getModel().setButtonValue(row, column, value + 1);
+			
+			this.view.getModel().setButtonValue(row, mod(column - 1, 5), 0);
+			this.view.getModel().setButtonValue(row, mod(column + 1, 5), 0);
+			this.view.getModel().setButtonValue(mod(row - 1, 5), column, 0);
+			this.view.getModel().setButtonValue(mod(row + 1, 5), column, 0);
+		}
+		
+		this.view.getModel().setButtonState(row, column, !state);
 		
 		System.out.println(String.format("Le boutton sur lequel vous avez appuyé avait pour valeur: %d", value));
 	}
-
+	
+	private int mod(int a, int b) {
+		return (((a % b) + b) % b);
+	}
 }
