@@ -94,8 +94,13 @@ public class GameView extends JFrame implements Observer {
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		if (o instanceof Game) {
-			this.clickCounter.setText(Integer.toString(this.model.getClickCounter()));
+		// An instance of Game is the only kind of object able to call this methods.
+		this.clickCounter.setText(Integer.toString(this.model.getClickCounter()));
+		
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				this.buttons[i][j].setText("" + this.model.getButtonValue(i, j));
+			}
 		}
 	}
 }
