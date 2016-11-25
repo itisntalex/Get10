@@ -9,9 +9,14 @@ import java.util.Observable;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
-import game.controllers.Button;
-import game.controllers.eventlisteners.ButtonEventListener;
+import game.controllers.Bouton;
+import game.controllers.eventlisteners.BoutonEventListener;
+import game.controllers.eventlisteners.ResetClickCounterListener;
 import game.models.Game;
 
 public class GameView extends JFrame implements Observer {
@@ -19,8 +24,13 @@ public class GameView extends JFrame implements Observer {
 	
 	// Graphic components.
 	private GridLayout layout;
-	private Button buttons[][];
-	private ButtonEventListener eventListener;
+	private Bouton buttons[][];
+	private JLabel clickCounter;
+	private JMenuBar menuBar;
+	private JMenu menuClickCounter;
+	private JMenuItem clickCounterReset;
+	private BoutonEventListener boutonEventListener;
+	private ResetClickCounterListener resetClickCounterListener;
 
 	public GameView(Game model) {
 		// Saving the model in the instance.
@@ -32,25 +42,43 @@ public class GameView extends JFrame implements Observer {
 		// Setting up the GUI.
 		setTitle("Get10");
 		
-		layout = new GridLayout(5, 5);
+		layout = new GridLayout(6, 5);
 		setLayout(layout);
 		
-		eventListener = new ButtonEventListener(this);
+		boutonEventListener = new BoutonEventListener(this);
 		
-		buttons = new Button[5][5];
+		buttons = new Bouton[5][5];
 		
-		Button current_button;
+		Bouton current_button;
 		
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				current_button = new Button(String.valueOf(this.model.getButtonValue(i, j)), i, j);
-				current_button.addActionListener(this.eventListener);
+				current_button = new Bouton("" + this.model.getButtonValue(i, j), i, j);
+				current_button.addActionListener(this.boutonEventListener);
 				
 				buttons[i][j] = current_button;
 				
 				add(current_button);
 			}
 		}
+		
+		this.clickCounter = new JLabel(Integer.toString(this.model.getClickCounter()));
+		add(this.clickCounter);
+		
+		this.menuBar = new JMenuBar();
+		
+		this.menuClickCounter = new JMenu("Compteur de clic");
+		
+		this.clickCounterReset = new JMenuItem("Réinitialiser");
+		this.menuClickCounter.add(this.clickCounterReset);
+		
+		this.resetClickCounterListener = new ResetClickCounterListener(this);
+		
+		this.clickCounterReset.addActionListener(this.resetClickCounterListener);
+		
+		this.menuBar.add(this.menuClickCounter);
+		
+		this.setJMenuBar(this.menuBar);
 		
 		pack();
 		setVisible(true);
@@ -62,5 +90,8 @@ public class GameView extends JFrame implements Observer {
 	
 	@Override
 	public void update(Observable o, Object arg) {
+		if (o instanceof Game) {
+			this.clickCounter.setText(Integer.toString(this.model.getClickCounter()));
+		}
 	}
 }

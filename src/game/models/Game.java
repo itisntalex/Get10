@@ -36,4 +36,15 @@ public class Game extends Observable {
 		setChanged();
 		notifyObservers();
 	}
+	
+	public void resetClickCounter() {
+		clickCounter = 0;
+		
+		setChanged();
+		notifyObservers();
+	}
+	
+	public int getClickCounter() {
+		return this.clickCounter;
+	}
 }
